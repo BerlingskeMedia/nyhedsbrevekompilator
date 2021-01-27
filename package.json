@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
-    "dev": "nodemon --inspect --ignore 'client/' --ignore 'templates/' server/index.js"
+    "dev": "nodemon --inspect --ignore 'client/' server/index.js"
   },
   "author": "Berlingske Media",
   "license": "ISC",
@@ -14,16 +14,18 @@
     "url": "https://github.com/BerlingskeMedia/nyhedsbrevekompilator"
   },
   "dependencies": {
-    "good": "^7.2.0",
-    "good-console": "^6.4.0",
-    "good-squeeze": "^5.0.2",
-    "hapi": "^16.6.2",
-    "inert": "^4.2.1",
-    "joi": "^10.6.0",
+    "@hapi/good": "^9.0.1",
+    "@hapi/hapi": "^20.0.3",
+    "@hapi/inert": "^6.0.3",
+    "@hapi/vision": "^6.0.1",
+    "dotenv": "^8.2.0",
+    "joi": "^17.3.0",
+    "laabr": "^6.1.3",
     "moment": "^2.18.1",
-    "mongodb": "^2.2.36",
-    "swig": "^1.4.2",
-    "swig-extras": "0.0.1",
+    "mongodb": "^3.6.3",
+    "nunjucks": "^3.2.2",
+    "nunjucks-autoescape": "^1.0.1",
+    "nunjucks-tag-spaceless": "^1.0.0",
     "vision": "^4.1.1"
   },
   "devDependencies": {

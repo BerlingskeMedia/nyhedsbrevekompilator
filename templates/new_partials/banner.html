@@ -1,4 +1,4 @@
-{% if kw2 === undefined %}
+{% if kw2 == undefined %}
   {% set kw2 = timestamp | yyyymmdd %}
 {% endif %}
 
@@ -23,8 +23,8 @@
             </tr>
             <tr>
               <td>
-                <a target="_blank" href="http://ad1.emediate.dk/eas?cu={{ cu }};ty=ct;kw={{ kw }};kw2={{ kw2 }};upair={{ kw }}_{{ kw2 }}_%%_subscriberkey%%" title="">
-                  <img class="full" src="http://ad1.emediate.dk/eas?cu={{ cu }};cre=img;kw={{ kw }};kw2={{ kw2 }};upair={{ kw }}_{{ kw2 }}_%%_subscriberkey%%" alt="" border="0" style="max-width: 100%; display: block;" width="inital" />
+                <a target="_blank" href="http://ad1.emediate.dk/eas?cu={{ content.cu }};ty=ct;kw={{ kw }};kw2={{ kw2 }};upair={{ kw }}_{{ kw2 }}_%%_subscriberkey%%" title="">
+                  <img class="full" src="http://ad1.emediate.dk/eas?cu={{ content.cu }};cre=img;kw={{ kw }};kw2={{ kw2 }};upair={{ kw }}_{{ kw2 }}_%%_subscriberkey%%" alt="" border="0" style="max-width: 100%; display: block;" width="inital" />
                 </a>
               </td>
             </tr>

@@ -11,9 +11,18 @@ getExactTargetAuthtoken();
 console.log('Connecting to ExactTarget using ClientID', process.env.EXACTTARGET_APP_CLIENT_ID);
 
 
-module.exports.createEmailAsset = function(payload, callback) {
-  callExactTarget('POST', '/asset/v1/content/assets', payload, standardCallback(callback));
+const createEmailAsset = function(payload, callback) {
+  return callExactTarget('POST', '/asset/v1/content/assets', payload, standardCallback(callback));
 };
+
+module.exports.createEmailAsset = (payload) => new Promise((resolve, reject) => {
+  createEmailAsset(payload, (err, data) => {
+    if (err) {
+      return reject(err);
+    }
+    return resolve(data);
+  })
+});
 
 
 

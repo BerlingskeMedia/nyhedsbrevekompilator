@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 {% spaceless %}
+{% set box_banner_2_inserted = false %}
 <head lang="en">
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -114,13 +115,13 @@
               <td width="100%" align="center" valign="top">
                 <div style="max-width: 614px; display: inline-block; background-color: #ffffff; font-size; 0; line-height: 0px;">
                   {% set width=614 %}
-                  {% set node = nodes[0]; %}
-                  {% if node !== undefined && node !== null %}
-                    {% set node.primary_article = true; %}
-                    {% if primary_article_template !== undefined && primary_article_template !== null && primary_article_template !== true %}
-                      {% include primary_article_template %}
+                  {% set node = nodes[0] %}
+                  {% if node != undefined and node != null %}
+                    {% set node = node | setAttribute('primary_article', true) %}
+                    {% if primary_article_template != undefined and primary_article_template != null and primary_article_template != true %}
+                      {% include "partials/" + primary_article_template %}
                     {% else %}
-                      {% include article_template %}
+                      {% include "partials/" + article_template %}
                     {% endif %}
                   {% endif %}
                 </div>
@@ -146,9 +147,9 @@
       </td>
     </tr>
     {% for node in nodes %}
-      {% if max_nodes > 0 && loop.index > max_nodes %}
+      {% if max_nodes > 0 and loop.index > max_nodes %}
         {# This is empty on purpose. #}
-      {% elif loop.index0 !== 0 && loop.index0 % 2 === 0 %}
+      {% elif loop.index0 != 0 and loop.index0 % 2 == 0 %}
         <tr>
           <td align="center" valign="top">
             <!-- Two-column stories -->
@@ -159,16 +160,16 @@
                     <div style="max-width: 300px; padding-right: 7px; display: inline-block; background-color: #ffffff; font-size; 0; line-height: 0px;">
                       <!-- Right story -->
                       {% set width=300 %}
-                      {% set node = nodes[loop.index0 - 1]; %}
-                      {% include article_template %}
+                      {% set node = nodes[loop.index0 - 1] %}
+                      {% include "partials/" + article_template %}
                     </div>
                   </td>
                   <td height="100%" width="50%" align="center" valign="top">
                     <div style="max-width: 300px; padding-left: 7px; display: inline-block; background-color: #ffffff; font-size; 0; line-height: 0px;">
                       <!-- Left story -->
                       {% set width=300 %}
-                      {% set node = nodes[loop.index0]; %}
-                      {% include article_template %}
+                      {% set node = nodes[loop.index0] %}
+                      {% include "partials/" + article_template %}
                     </div>
                   </td>
                 </tr>
@@ -179,7 +180,7 @@
         </tr>
       {% endif %}
 
-      {% if loop.index === 5 %}
+      {% if loop.index == 5 %}
         {% set box_banner_1_inserted = true %}
         <tr>
           <td align="center" valign="top">
@@ -189,7 +190,7 @@
             <!-- 4:3 beerbox banner END -->
           </td>
         </tr>
-      {% elif loop.index === 9 %}
+      {% elif loop.index == 9 %}
         {% set box_banner_2_inserted = true %}
         <tr>
           <td align="center" valign="top">
@@ -220,7 +221,7 @@
       </td>
     </tr>
 
-    {% if box_banner_2_inserted !== true %}
+    {% if box_banner_2_inserted != true %}
     <tr>
       <td align="center" valign="top">
         <!-- Second 4:3 beerbox banner -->

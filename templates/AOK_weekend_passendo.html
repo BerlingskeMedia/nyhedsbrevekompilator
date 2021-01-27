@@ -1,33 +1,34 @@
 {% extends "brands/aok.html" %}
 
-{% set tracking = "utm_source=newsletter&utm_medium=email&utm_content=red_nb-" + timestamp | yyyymmdd + "&utm_campaign=AOK_weekend"; %}
-{% set home_url = "http://www.aok.dk"; %}
-{% set logo_src = "https://s3-eu-west-1.amazonaws.com/nlstatic.berlingskemedia.dk/headers/aok_weekend.png"; %}
+{% set tracking = "utm_source=newsletter&utm_medium=email&utm_content=red_nb-" + timestamp | yyyymmdd + "&utm_campaign=AOK_weekend" %}
+{% set home_url = "http://www.aok.dk" %}
+{% set logo_src = "https://s3-eu-west-1.amazonaws.com/nlstatic.berlingskemedia.dk/headers/aok_weekend.png" %}
 {% set unsubscribe_href = "https://profil.berlingskemedia.dk/tilmeldt/17?id=%%ExternalId%%" %}
 
-{% set kw = "AOK_weekend"; %}
+{% set kw = "AOK_weekend" %}
 
 {% block content %}
 
   <tr>
     <td height="20">&nbsp;</td>
   </tr>
-
-  {% include "new_partials/single_column.html" with
-    {
+  {% set content = {
       article_template: "briefing_article.html",
       article: nodes[0]
     }
   %}
+  {% include "new_partials/single_column.html" %}
 
-  {% include "new_partials/single_column.html" with
-    {
+  {% set content = {
       article_template: "aok_article.html",
       article: nodes[1]
     }
   %}
+  {% include "new_partials/single_column.html" %}
 
-  {% include "new_partials/passendo_banner.html" with { placementID: "139" } %}
+
+  {% set content = { placementID: '139' } %}
+  {% include "new_partials/passendo_banner.html" %}
 
   <tr>
     <td align="center" valign="top">
@@ -46,22 +47,21 @@
       </table>
     </td>
   </tr>
-
-  {% include "new_partials/single_column.html" with
-    {
+  {% set content = {
       article_template: "aok_article.html",
       article: nodes[2],
       show_tag: false
     }
   %}
+  {% include "new_partials/single_column.html" %}
+
 
 
   {% for node in nodes %}
-    {% if max_nodes > 0 && loop.index > max_nodes %}
+    {% if max_nodes > 0 and loop.index > max_nodes %}
       {# This is empty on purpose. #}
-    {% elif loop.index0 >= 3 && loop.index0 % 2 === 0 %}
-      {% include "new_partials/two_column.html" with
-        {
+    {% elif loop.index0 >= 3 and loop.index0 % 2 == 0 %}
+      {% set content = {
           articleA: {
             article_template: "aok_article.html",
             article: nodes[loop.index0 - 1]
@@ -72,10 +72,12 @@
           }
         }
       %}
+      {% include "new_partials/two_column.html" %}
+
     {% endif %}
   {% endfor %}
 
-
-  {% include "new_partials/passendo_banner.html" with { placementID: "94" } %}
+  {% set content = { placementID: '94' } %}
+  {% include "new_partials/passendo_banner.html" %}
 
 {% endblock %}

@@ -1,9 +1,30 @@
 {% extends "partials/bt.html" %}
 
-{% set home_url = "http://www.bt.dk"; %}
+{% set home_url = "http://www.bt.dk" %}
 
-{% set tracking = "utm_source=newsletter&utm_medium=email&utm_content=red_nb-" + timestamp | yyyymmdd + "&utm_campaign=bt_breaking"; %}
-{% set logo_src = "https://s3-eu-west-1.amazonaws.com/nlstatic.berlingskemedia.dk/headers/65023_BT_654x57_header_Breaking_0518.png"; %}
+{% set tracking = "utm_source=newsletter&utm_medium=email&utm_content=red_nb-" + timestamp | yyyymmdd + "&utm_campaign=bt_breaking" %}
+{% set logo_src = "https://s3-eu-west-1.amazonaws.com/nlstatic.berlingskemedia.dk/headers/65023_BT_654x57_header_Breaking_0518.png" %}
 {% set unsubscribe_href = "https://profil.berlingskemedia.dk/tilmeldt/26?id=%%ExternalId%%" %}
 {% set buy_subscription_href = "https://abonnement.bt.dk/abonnementer?utm_source=own_newsletters_ed&utm_medium=bt&utm_content=nl_link&utm_campaign=abonnementer_bt&ns_fee=AL-151222-CP-WKLEDIT1WK" %}
 {% set annoncor_href = "https://annoncering.bt.dk/" %}
+
+{% block wide_banner_1 %}
+{% endblock %}
+
+{% block wide_banner_2 %}
+{% endblock %}
+
+{% block wide_banner_3 %}
+{% endblock %}
+
+{% block story_appendix %}
+{% endblock %}
+
+{% block box_banner_1 %}
+{% endblock %}
+
+{% block box_banner_2 %}
+{% endblock %}
+
+{% block box_banner_3 %}
+{% endblock %}

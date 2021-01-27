@@ -1,4 +1,4 @@
-{% extends "basic.html" %}
+{% extends "partials/basic.html" %}
 
 {% block font_face %}
   @font-face {
@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% set font_family="bt_bold, 'Helvetica Neue', Helvetica, 'Arial Black', Arial, sans-serif" %}
-{% set article_template = "bt_article.html"; %}
+{% set article_template = "bt_article.html" %}
 
 {% block top_logo %}
   <img style="width: 100%;" src="{{ logo_src }}" width="654" usemap="#imgmap">

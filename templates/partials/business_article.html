@@ -1,4 +1,18 @@
-{% if node !== undefined && node !== null %}
+{% if node == undefined or node == null %}
+  {% if content != undefined and content != null %}
+    {% set node = content.node %}
+  {% endif %}
+{% endif %}
+
+{% if width == undefined or width == null %}
+  {% if content != undefined and content != null %}
+    {% set width = content.width %}
+  {% else %}
+    {% set width = 'auto' %}
+  {% endif %}
+{% endif %}
+
+{% if node != undefined and node != null %}
 
 {% set article_url_appendage = tags | tagValue('article_url_appendage') %}
 
@@ -14,14 +28,14 @@
 {% set background = "#ffffff" %}
 
 {% set image_count = 0; %}
-{% if node.images | typeof === '[object Object]' %}
+{% if node.images | typeof == '[object Object]' %}
   {% set images_keys = Object.keys(node.images); %}
   {% set image_count = images_keys.length; %}
-{% elif node.images | typeof === '[object Array]' %}
+{% elif node.images | typeof == '[object Array]' %}
   {% set image_count = node.images.length; %}
 {% endif %}
 
-{% if image_count === 0 %}
+{% if image_count == 0 %}
   {% set background = "#f1f1f1" %}
 {% endif %}
 
@@ -30,7 +44,7 @@
   {% if image_count > 0 %}
     {% set image_found = false; %}
     {% for image in node.images %}
-      {% if !image_found && image.relation | hasValue('default') %}
+      {% if !image_found and image.relation | hasValue('default') %}
         {% set image_found = true; %}
         <a href="{{ node.url }}?{{ article_url_appendage }}&{{ tracking }}" target="_blank" style="text-decoration: none;">
           <img  style="width: {{ width }}px;"
@@ -44,7 +58,7 @@
 
   <div style="width: {{ width }}px;">
 
-    {% if background !== '#ffffff' %}
+    {% if background != '#ffffff' %}
     <div style="background-color: {{ background }}; padding-top: 5px; padding-right: 5px; padding-bottom: 10px; padding-left: 5px;">
     {% else %}
     <div style="padding-top: 2px;">
@@ -90,7 +104,7 @@
       </div>
       {% else %}
 
-        {% if (node.primary_article && node.summary) || always_show_article_summary === true %}
+        {% if (node.primary_article and node.summary) or always_show_article_summary == true %}
         <a href="{{ node.url }}?{{ tracking }}" target="_blank"  style="text-decoration: none;">
           <div style="text-align: left; line-height: 100%; padding-top: 5px; text-decoration: none;">
             <font
@@ -125,7 +139,7 @@
           </div>
         </a>
 
-        {% elif node.type === 'image_gallery' %}
+        {% elif node.type == 'image_gallery' %}
         <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
           <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
             <font
@@ -136,7 +150,7 @@
           </div>
         </a>
 
-        {% elif node.type === 'news_article' %}
+        {% elif node.type == 'news_article' %}
         <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
           <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
             <font
@@ -147,7 +161,7 @@
           </div>
         </a>
 
-        {% elif node.type === 'news_article_external' %}
+        {% elif node.type == 'news_article_external' %}
         <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
           <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
             <font
@@ -158,7 +172,7 @@
           </div>
         </a>
 
-        {% elif node.type === 'webtv_link' %}
+        {% elif node.type == 'webtv_link' %}
         <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
           <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
             <font

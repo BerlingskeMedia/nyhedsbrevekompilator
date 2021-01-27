@@ -11,17 +11,21 @@
 {% set kw = "berlingske_techviden"; %}
 
 {% block wide_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206042" } %}
+{% set content = { setID: '206042' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block wide_banner_3 %}
-{% include "partials/adbutler_banner.html" with { setID: "206043" } %}
+{% set content = { setID: '206043' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_1 %}
-{% include "partials/adbutler_banner.html" with { setID: "206247" } %}
+{% set content = { setID: '206247' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206248" } %}
+{% set content = { setID: '206248' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}

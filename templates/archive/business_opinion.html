@@ -9,17 +9,21 @@
 {% set kw = "business_opinion"; %}
 
 {% block wide_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "205999" } %}
+{% set content = { setID: '205999' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block wide_banner_3 %}
-{% include "partials/adbutler_banner.html" with { setID: "223840" } %}
+{% set content = { setID: '223840' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_1 %}
-{% include "partials/adbutler_banner.html" with { setID: "223838" } %}
+{% set content = { setID: '223838' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "223839" } %}
+{% set content = { setID: '223839' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}

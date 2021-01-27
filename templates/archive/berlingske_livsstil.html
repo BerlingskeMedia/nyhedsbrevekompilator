@@ -11,17 +11,21 @@
 {% set kw = "berlingske_fri_weekend"; %}
 
 {% block wide_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206030" } %}
+{% set content = { setID: '206030' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block wide_banner_3 %}
-{% include "partials/adbutler_banner.html" with { setID: "206031" } %}
+{% set content = { setID: '206031' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_1 %}
-{% include "partials/adbutler_banner.html" with { setID: "206182" } %}
+{% set content = { setID: '206182' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206277" } %}
+{% set content = { setID: '206277' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}

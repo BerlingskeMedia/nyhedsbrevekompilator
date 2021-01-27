@@ -1,30 +1,31 @@
 {% extends "brands/berlingske.html" %}
 
-{% set tracking = "utm_source=newsletter&utm_medium=email&utm_content=red_nb-" + timestamp | yyyymmdd + "&utm_campaign=berlingske_business_aktier"; %}
-{% set home_url = "https://www.berlingske.dk"; %}
+{% set tracking = "utm_source=newsletter&utm_medium=email&utm_content=red_nb-" + timestamp | yyyymmdd + "&utm_campaign=berlingske_business_aktier" %}
+{% set home_url = "https://www.berlingske.dk" %}
 {% set unsubscribe_href = "https://profil.berlingskemedia.dk/smartlinks?ekstern_id=%%ExternalId%%&nid=32&nid=16490&lid=3141&action=signout&url=https%3A%2F%2Fwww.berlingske.dk%2Fafmelding" %}
 {% set buy_subscription_href = "https://abonnement.berlingske.dk/berlingske-abonnementer/?utm_source=own_newsletters_ed&utm_medium=berlingske&utm_content=nl_link&utm_campaign=abonnementer_berlingske&ns_fee=AL-151222-CP-WKLEDIT1WK" %}
 
-{% set berlingske_header_name = "Business Aktier"; %}
-{% set berlingske_header_color = "#A50E4B"; %}
+{% set berlingske_header_name = "Business Aktier" %}
+{% set berlingske_header_color = "#A50E4B" %}
+{% set last_banner_inserted = false %}
 
 {% block content %}
-
-  {% include "new_partials/berlingske_single_column.html" with
-    {
+  {% set content = {
       article_template: "berlingske_article.html",
       article: nodes[0]
     }
   %}
+  {% include "new_partials/berlingske_single_column.html" %}
 
-  {% include "new_partials/berlingske_annonce.html" with { placementID: "132" } %}
+
+  {% set content = { placementID: '132' } %}
+  {% include "new_partials/berlingske_annonce.html" %}
 
   {% for node in nodes %}
-    {% if max_nodes > 0 && loop.index > max_nodes %}
+    {% if max_nodes > 0 and loop.index > max_nodes %}
       {# This is empty on purpose. #}
-    {% elif loop.index0 > 0 && loop.index0 % 2 === 0 %}
-      {% include "new_partials/berlingske_two_columns.html" with
-        {
+    {% elif loop.index0 > 0 and loop.index0 % 2 == 0 %}
+      {% set content = {
           articleA: {
             article_template: "berlingske_article.html",
             article: nodes[loop.index0 - 1]
@@ -35,22 +36,27 @@
           }
         }
       %}
+      {% include "new_partials/berlingske_two_columns.html" %}
+
     {% endif %}
 
-    {% if loop.index === 5 %}
-      {% include "new_partials/berlingske_annonce.html" with { placementID: "114" } %}
+    {% if loop.index == 5 %}
+      {% set content = { placementID: '114' } %}
+      {% include "new_partials/berlingske_annonce.html" %}
       {% set box_banner_1_inserted = true %}
-    {% elif loop.index === 9 %}
-      {% include "new_partials/berlingske_annonce.html" with { placementID: "116" } %}
+    {% elif loop.index == 9 %}
+      {% set content = { placementID: '116' } %}
+      {% include "new_partials/berlingske_annonce.html" %}
       {% set last_banner_inserted = true %}
     {% endif %}
   {% endfor %}
 
-  {% if last_banner_inserted !== true %}
-    {% include "new_partials/berlingske_annonce.html" with { placementID: "116" } %}
+  {% if last_banner_inserted != true %}
+    {% set content = { placementID: '116' } %}
+    {% include "new_partials/berlingske_annonce.html" %}
   {% endif %}
 
-
-  {# include "new_partials/berlingske_annonce.html" with { placementID: "XXX" } #}
+  {% set content = { placementID: 'XXX' } %}
+  {# include "new_partials/berlingske_annonce.html" #}
 
 {% endblock %}

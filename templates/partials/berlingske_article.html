@@ -1,198 +1,200 @@
-{% if node !== undefined && node !== null %}
+{% set node = content.node %}
+{% set width = content.width %}
 
-{% set article_url_appendage = tags | tagValue('article_url_appendage') %}
+{% if node != undefined and node != null %}
+  {% set article_url_appendage = tags | tagValue('article_url_appendage') %}
 
-{% set primary_tag = null %}
-{% if node.taxonomyTags.primary %}
-  {% for tag in node.taxonomyTags.primary %}
-    {% if tag.id != "2" %} {% set primary_tag = tag.tag %} {# wwww.b.dk #}
-    {% else %} {% set primary_tag = "Nyheder" %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
-
-{% set background = "#ffffff" %}
-
-{% set image_count = 0; %}
-{% if node.images | typeof === '[object Object]' %}
-  {% set images_keys = Object.keys(node.images); %}
-  {% set image_count = images_keys.length; %}
-{% elif node.images | typeof === '[object Array]' %}
-  {% set image_count = node.images.length; %}
-{% endif %}
-
-{% if image_count === 0 %}
-  {% set background = "#f1f1f1" %}
-{% endif %}
-
-<div style="width: {{ width }}px; height: 100%; display: inline-block; background-color: {{ background }}; font-size: 0; line-height: 0px;">
-
-  {% if image_count > 0 %}
-    {% set image_found = false; %}
-    {% for image in node.images %}
-      {% if !image_found && image.relation | hasValue('default') %}
-        {% set image_found = true; %}
-        <a href="{{ node.url }}?{{ article_url_appendage }}&{{ tracking }}" target="_blank" style="text-decoration: none;">
-          <img  style="width: {{ width }}px;"
-                width="{{ width }}"
-                src="{{ image.image }}"
-                border="0" />
-        </a>
+  {% set primary_tag = null %}
+  {% if node.taxonomyTags.primary %}
+    {% for tag in node.taxonomyTags.primary %}
+      {% if tag.id != "2" %} {% set primary_tag = tag.tag %} {# wwww.b.dk #}
+      {% else %} {% set primary_tag = "Nyheder" %}
       {% endif %}
     {% endfor %}
   {% endif %}
 
-  <div style="width: {{ width }}px;">
+  {% set background = "#ffffff" %}
 
-    {% if background !== '#ffffff' %}
-    <div style="background-color: {{ background }}; padding-top: 5px; padding-right: 5px; padding-bottom: 10px; padding-left: 5px;">
-    {% else %}
-    <div style="padding-top: 2px;">
+  {% set image_count = 0 %}
+  {% if node.images | typeof == '[object Object]' %}
+    {% set images_keys = Object.keys(node.images) %}
+    {% set image_count = images_keys.length %}
+  {% elif node.images | typeof == '[object Array]' %}
+    {% set image_count = node.images.length %}
+  {% endif %}
+
+  {% if image_count == 0 %}
+    {% set background = "#f1f1f1" %}
+  {% endif %}
+
+  <div style="width: {{ width }}px; height: 100%; display: inline-block; background-color: {{ background }}; font-size: 0; line-height: 0px;">
+
+    {% if image_count > 0 %}
+      {% set image_found = false %}
+      {% for image in node.images %}
+        {% if not image_found and image.relation | hasValue('default') %}
+          {% set image_found = true %}
+          <a href="{{ node.url }}?{{ article_url_appendage }}&{{ tracking }}" target="_blank" style="text-decoration: none;">
+            <img  style="width: {{ width }}px;"
+                  width="{{ width }}"
+                  src="{{ image.image }}"
+                  border="0" />
+          </a>
+        {% endif %}
+      {% endfor %}
     {% endif %}
 
-      {% if primary_tag %}
-      <div style="text-align: left; line-height: 100%; padding-top: 3px; padding-bottom: 5px;">
-        <span style="padding: 1px 0px 3px 0px;">
-          <font
-            color="#3795a0"
-            style="font-family: {{ font_family_sans|safe }}; font-size: 11px; line-height: 11px; text-transform: uppercase; text-rendering: optimizeLegibility;">
-            {{ primary_tag }}
-          </font>
-        </span>
-      </div>
+    <div style="width: {{ width }}px;">
+
+      {% if background != '#ffffff' %}
+      <div style="background-color: {{ background }}; padding-top: 5px; padding-right: 5px; padding-bottom: 10px; padding-left: 5px;">
+      {% else %}
+      <div style="padding-top: 2px;">
       {% endif %}
 
-      <a href="{{ node.url }}?{{ article_url_appendage }}&{{ tracking }}" target="_blank" style="text-decoration: none;">
-        <div style="text-align: left; line-height: 100%; padding-top: 5px; text-decoration: none;">
-          {% if node.primary_article %}
-          <font
-            color="#1A1A1A"
-            style="font-family: {{ font_family_bold|safe }}; font-size: 36px; line-height: 36px; font-weight: bold; text-rendering: optimizeLegibility;">
-            {{ node.title }}
-          </font>
-          {% else %}
-          <font
-            color="#1A1A1A"
-            style="font-family: {{ font_family|safe }}; font-size: 25px; line-height: 25px; text-rendering: optimizeLegibility;">
-            {{ node.title }}
-          </font>
-          {% endif %}
+        {% if primary_tag %}
+        <div style="text-align: left; line-height: 100%; padding-top: 3px; padding-bottom: 5px;">
+          <span style="padding: 1px 0px 3px 0px;">
+            <font
+              color="#3795a0"
+              style="font-family: {{ font_family_sans|safe }}; font-size: 11px; line-height: 11px; text-transform: uppercase; text-rendering: optimizeLegibility;">
+              {{ primary_tag }}
+            </font>
+          </span>
         </div>
-      </a>
+        {% endif %}
 
-      {% if node.show_body %}
-      <div style="text-align: left; line-height: 100%; padding-top: 5px; text-decoration: none;">
-        <font
-          color="#1A1A1A"
-          style="font-family: {{ font_family|safe }}; text-decoration: none; font-size: 18px; line-height: 22px; text-rendering: optimizeLegibility;">
-          {% autoescape false %} {{ node.body | safe }} {% endautoescape %}
-        </font>
-      </div>
-      {% else %}
-
-        {% if (node.primary_article && node.summary) || always_show_article_summary === true %}
-        <a href="{{ node.url }}?{{ tracking }}" target="_blank"  style="text-decoration: none;">
+        <a href="{{ node.url }}?{{ article_url_appendage }}&{{ tracking }}" target="_blank" style="text-decoration: none;">
           <div style="text-align: left; line-height: 100%; padding-top: 5px; text-decoration: none;">
+            {% if node.primary_article %}
             <font
               color="#1A1A1A"
-              style="font-family: {{ font_family|safe }}; text-decoration: none; font-size: 18px; line-height: 22px; text-rendering: optimizeLegibility;">
-              {{ node.summary }}
+              style="font-family: {{ font_family_bold|safe }}; font-size: 36px; line-height: 36px; font-weight: bold; text-rendering: optimizeLegibility;">
+              {{ node.title }}
             </font>
+            {% else %}
+            <font
+              color="#1A1A1A"
+              style="font-family: {{ font_family|safe }}; font-size: 25px; line-height: 25px; text-rendering: optimizeLegibility;">
+              {{ node.title }}
+            </font>
+            {% endif %}
           </div>
         </a>
-        {% endif %}
 
-        {% if node.taxonomyTags.presentationTags | hasTag("334794", "id")  %}
-        <div style="text-align: left; line-height: 100%; padding-top: 10px;">
+        {% if node.show_body %}
+        <div style="text-align: left; line-height: 100%; padding-top: 5px; text-decoration: none;">
           <font
             color="#1A1A1A"
-            style="font-family: {{ font_family_sans|safe }}; text-decoration: none; font-size: 11.2px; color: rgba(0,0,0,0.5); line-height: 16.8px; text-rendering: optimizeLegibility;">
-              <span class="subscriber-notice">FOR ABONNENTER</span>
+            style="font-family: {{ font_family|safe }}; text-decoration: none; font-size: 18px; line-height: 22px; text-rendering: optimizeLegibility;">
+            {% autoescape false %} {{ node.body | safe }} {% endautoescape %}
           </font>
         </div>
-        {% endif %}
+        {% else %}
 
-        {% if node.custom_summary %}
-        <a href="{{ node.url }}?{{ tracking }}" target="_blank"  style="text-decoration: none;">
+          {% if (node.primary_article and node.summary) or always_show_article_summary == true %}
+          <a href="{{ node.url }}?{{ tracking }}" target="_blank"  style="text-decoration: none;">
+            <div style="text-align: left; line-height: 100%; padding-top: 5px; text-decoration: none;">
+              <font
+                color="#1A1A1A"
+                style="font-family: {{ font_family|safe }}; text-decoration: none; font-size: 18px; line-height: 22px; text-rendering: optimizeLegibility;">
+                {{ node.summary }}
+              </font>
+            </div>
+          </a>
+          {% endif %}
+
+          {% if node.taxonomyTags.presentationTags | hasTag("334794", "id")  %}
           <div style="text-align: left; line-height: 100%; padding-top: 10px;">
             <font
               color="#1A1A1A"
-              style="font-family: {{ font_family|safe }}; text-decoration: none; font-size: 18px; line-height: 22px; text-rendering: optimizeLegibility;">
-              {% autoescape false %} {{ node.custom_summary | safe }} {% endautoescape %}
+              style="font-family: {{ font_family_sans|safe }}; text-decoration: none; font-size: 11.2px; color: rgba(0,0,0,0.5); line-height: 16.8px; text-rendering: optimizeLegibility;">
+                <span class="subscriber-notice">FOR ABONNENTER</span>
             </font>
           </div>
-        </a>
+          {% endif %}
+
+          {% if node.custom_summary %}
+          <a href="{{ node.url }}?{{ tracking }}" target="_blank"  style="text-decoration: none;">
+            <div style="text-align: left; line-height: 100%; padding-top: 10px;">
+              <font
+                color="#1A1A1A"
+                style="font-family: {{ font_family|safe }}; text-decoration: none; font-size: 18px; line-height: 22px; text-rendering: optimizeLegibility;">
+                {% autoescape false %} {{ node.custom_summary | safe }} {% endautoescape %}
+              </font>
+            </div>
+          </a>
+          {% endif %}
+
+          {% if node.calltoaction %}
+          <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
+            <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
+              <font
+                color="#d00000"
+                style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
+                {{ node.calltoaction }}
+              </font>
+            </div>
+          </a>
+
+          {% elif node.type == 'image_gallery' %}
+          <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
+            <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
+              <font
+                color="#d00000"
+                style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
+                Se billederne
+              </font>
+            </div>
+          </a>
+
+          {% elif node.type == 'news_article' %}
+          <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
+            <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
+              <font
+                color="#d00000"
+                style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
+                L&aelig;s mere
+              </font>
+            </div>
+          </a>
+
+          {% elif node.type == 'news_article_external' %}
+          <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
+            <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
+              <font
+                color="#d00000"
+                style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
+                L&aelig;s mere
+              </font>
+            </div>
+          </a>
+
+          {% elif node.type == 'webtv_link' %}
+          <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
+            <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
+              <font
+                color="#d00000"
+                style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
+                Se TV-klip
+              </font>
+            </div>
+          </a>
+
+          {% else %}
+          <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
+            <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
+              <font
+                color="#d00000"
+                style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
+                L&aelig;s mere
+              </font>
+            </div>
+          </a>
+
+          {% endif %}
         {% endif %}
-
-        {% if node.calltoaction %}
-        <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
-          <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
-            <font
-              color="#d00000"
-              style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
-              {{ node.calltoaction }}
-            </font>
-          </div>
-        </a>
-
-        {% elif node.type === 'image_gallery' %}
-        <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
-          <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
-            <font
-              color="#d00000"
-              style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
-              Se billederne
-            </font>
-          </div>
-        </a>
-
-        {% elif node.type === 'news_article' %}
-        <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
-          <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
-            <font
-              color="#d00000"
-              style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
-              L&aelig;s mere
-            </font>
-          </div>
-        </a>
-
-        {% elif node.type === 'news_article_external' %}
-        <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
-          <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
-            <font
-              color="#d00000"
-              style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
-              L&aelig;s mere
-            </font>
-          </div>
-        </a>
-
-        {% elif node.type === 'webtv_link' %}
-        <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
-          <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
-            <font
-              color="#d00000"
-              style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
-              Se TV-klip
-            </font>
-          </div>
-        </a>
-
-        {% else %}
-        <a href="{{ node.url }}?{{ tracking }}" target="_blank" style="text-decoration: none;">
-          <div style="text-align: left; line-height: 100%; padding: 10px 0px;">
-            <font
-              color="#d00000"
-              style="font-family: {{ font_family_sans|safe }}; text-decoration: underline; font-weight: bold; font-size: 16px; line-height: 16px; text-rendering: optimizeLegibility;">
-              L&aelig;s mere
-            </font>
-          </div>
-        </a>
-
-        {% endif %}
-      {% endif %}
+      </div>
     </div>
   </div>
-</div>
 {% endif %}

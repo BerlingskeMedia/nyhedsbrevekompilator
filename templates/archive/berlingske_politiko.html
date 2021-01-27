@@ -11,19 +11,23 @@
 {% set kw = "berlingske_politiko"; %}
 
 {% block wide_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206038" } %}
+{% set content = { setID: '206038' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block wide_banner_3 %}
-{% include "partials/adbutler_banner.html" with { setID: "206039" } %}
+{% set content = { setID: '206039' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_1 %}
-{% include "partials/adbutler_banner.html" with { setID: "206185" } %}
+{% set content = { setID: '206185' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206186" } %}
+{% set content = { setID: '206186' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block social %}

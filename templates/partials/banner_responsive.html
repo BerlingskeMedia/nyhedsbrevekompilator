@@ -12,7 +12,7 @@
           <td width="100%" height="14" style="font-size: 0px; line-height: 0px;">&nbsp;</td>
         </tr>
         <tr>
-          {% if hide_annonce_background !== true %}
+          {% if content.hide_annonce_background != true %}
           <td width="100%" align="center" valign="top" bgcolor="#ececec">
           {% else %}
           <td width="100%" align="center" valign="top">
@@ -39,14 +39,14 @@
                     <tr>
                       <td width="100%" align="center">
                         <div style="text-align: left;">
-                          {% if hide_annonce_label !== true %}
+                          {% if content.hide_annonce_label != true %}
                           <font color="#333333" style="font-family: 'Helvetica Neue', Helvetica, 'Arial Black', Arial, sans-serif; font-size: 10px; line-height: 10px;  text-rendering: optimizeLegibility;">
                             ANNONCE
                           </font>
                           <br>
                           {% endif %}
-                          <a target="_blank" href="http://ad1.emediate.dk/eas?cu={{ cu }};ty=ct;kw={{ kw }};kw2={{ kw2 }};upair=%%ExternalId%%" title="">
-                            <img class="full" src="http://ad1.emediate.dk/eas?cu={{ cu }};cre=img;kw={{ kw }};kw2={{ kw2 }};upair=%%ExternalId%%" alt="" border="0" style="display:block; max-width: 614px !important;" width="100%" />
+                          <a target="_blank" href="http://ad1.emediate.dk/eas?cu={{ content.cu }};ty=ct;kw={{ kw }};kw2={{ kw2 }};upair=%%ExternalId%%" title="">
+                            <img class="full" src="http://ad1.emediate.dk/eas?cu={{ content.cu }};cre=img;kw={{ kw }};kw2={{ kw2 }};upair=%%ExternalId%%" alt="" border="0" style="display:block; max-width: 614px !important;" width="100%" />
                           </a>
                         </div>
                       </td>

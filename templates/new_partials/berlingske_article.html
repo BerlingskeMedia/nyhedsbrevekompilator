@@ -1,24 +1,26 @@
-{% if node !== undefined && node !== null %}
+{% set node = content.node %}
+{% set width = content.width %}
 
+{% if node != undefined and node != null %}
   {% set article_url_appendage = tags | tagValue('article_url_appendage') %}
 
   <!-- Berlingske article -->
   <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
     <tbody>
 
-      {% set image_count = 0; %}
-      {% if node.images | typeof === '[object Object]' %}
-        {% set images_keys = Object.keys(node.images); %}
-        {% set image_count = images_keys.length; %}
-      {% elif node.images | typeof === '[object Array]' %}
-        {% set image_count = node.images.length; %}
+      {% set image_count = 0 %}
+      {% if node.images | typeof == '[object Object]' %}
+        {% set images_keys = Object.keys(node.images) %}
+        {% set image_count = images_keys.length %}
+      {% elif node.images | typeof == '[object Array]' %}
+        {% set image_count = node.images.length %}
       {% endif %}
 
-      {% if image_count > 0 && node.hide_image !== true %}
-        {% set image_found = false; %}
+      {% if image_count > 0 and node.hide_image != true %}
+        {% set image_found = false %}
         {% for image in node.images %}
-          {% if !image_found && image.relation | hasValue('default') %}
-            {% set image_found = true; %}
+          {% if not image_found and image.relation | hasValue('default') %}
+            {% set image_found = true %}
             <tr>
               <td align="center" valign="top">
                 <a href="{{ node.url }}?{{ article_url_appendage }}&{{ tracking }}" target="_blank" style="text-decoration: none;">
@@ -46,7 +48,7 @@
       {% endif %}
 
       {# Value "show_tag" must be false to hide the tag. But "node.show_body" must to true to hide it. (Ie. tag must be show if eitjer true or undefined) #}
-      {% if primary_tag && show_tag !== false && !node.show_body %}
+      {% if primary_tag and show_tag != false and not node.show_body %}
       <tr>
         <td align="left" valign="top">
           <div style="margin-top: 10px;">

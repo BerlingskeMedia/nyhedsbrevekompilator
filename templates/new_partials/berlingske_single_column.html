@@ -4,7 +4,9 @@
     <table width="587" cellpadding="0" cellspacing="10" border="0">
       <tr>
         <td>
-          {% include article_template with { node: article, width: 587 } %}
+          {% set article_template = content.article_template %}
+          {% set content = { node: content.article, width: 587 } %}
+          {% include "new_partials/" + article_template %}
         </td>
       </tr>
       <tr>

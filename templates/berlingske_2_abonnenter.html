@@ -1,27 +1,26 @@
 {% extends "brands/berlingske.html" %}
 
-{% set tracking = "utm_source=newsletter&utm_medium=email&utm_content=red_nb-" + timestamp | yyyymmdd + "&utm_campaign=berlingske_abonnentfordele"; %}
-{% set home_url = "https://www.berlingske.dk"; %}
+{% set tracking = "utm_source=newsletter&utm_medium=email&utm_content=red_nb-" + timestamp | yyyymmdd + "&utm_campaign=berlingske_abonnentfordele" %}
+{% set home_url = "https://www.berlingske.dk" %}
 {% set unsubscribe_href = "https://profil.berlingskemedia.dk/smartlinks?ekstern_id=%%ExternalId%%&action=signout&pid=502&lid=3053&url=http%3A%2F%2Fafmelding.b.dk%2Fdigitalinfo%2F" %}
 
-{% set berlingske_header_name = "Abonnentfordele"; %}
-{% set berlingske_header_color = "#201748"; %}
+{% set berlingske_header_name = "Abonnentfordele" %}
+{% set berlingske_header_color = "#201748" %}
 
 {% block content %}
-
-  {% include "new_partials/berlingske_single_column.html" with
-    {
+  {% set content = {
       article_template: "berlingske_article.html",
       article: nodes[0]
     }
   %}
+  {% include "new_partials/berlingske_single_column.html" %}
+
 
   {% for node in nodes %}
-    {% if max_nodes > 0 && loop.index > max_nodes %}
+    {% if max_nodes > 0 and loop.index > max_nodes %}
       {# This is empty on purpose. #}
-    {% elif loop.index0 > 0 && loop.index0 % 2 === 0 %}
-      {% include "new_partials/berlingske_two_columns.html" with
-        {
+    {% elif loop.index0 > 0 and loop.index0 % 2 == 0 %}
+      {% set content = {
           articleA: {
             article_template: "berlingske_article.html",
             article: nodes[loop.index0 - 1]
@@ -32,6 +31,8 @@
           }
         }
       %}
+      {% include "new_partials/berlingske_two_columns.html" %}
+
     {% endif %}
   {% endfor %}
 

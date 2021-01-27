@@ -77,35 +77,34 @@ const exacttarget_email_asset = {
 };
 
 
-module.exports.register = function (plugin, options, next) {
+module.exports.name = 'newsletters';
+module.exports.register = function (plugin, options) {
 
   plugin.route({
     method: 'get',
     path: '/admin/{param*}',
-    handler: function (request, reply) {
-      reply.redirect('/nyhedsbreve');
+    handler: function (request, h) {
+      return h.response().redirect('/');
     }
   });
 
   plugin.route({
     method: 'get',
     path: '/',
-    handler: function (request, reply) {
-      mongodb.nyhedsbreve().find({}).toArray(reply);
+    handler: function (request, h) {
+      return mongodb.nyhedsbreve().find({}).toArray();
     }
   });
 
   plugin.route({
     method: 'get',
     path: '/{ident}',
-    handler: function (request, reply) {
-      mongodb.nyhedsbreve().findOne({ident: request.params.ident}, function (err, newsletter) {
-        if (newsletter !== null) {
-          reply(newsletter);
-        } else {
-          reply().code(404);
-        }
-      });
+    handler: async function (request, h) {
+      const newsletter = await mongodb.nyhedsbreve().findOne({ident: request.params.ident});
+      if (newsletter !== null) {
+        return newsletter;
+      }
+      return h.response().code(404);
     }
   });
 
@@ -114,28 +113,22 @@ module.exports.register = function (plugin, options, next) {
     path: '/',
     config: {
         validate: {
-            payload: {
+            payload: Joi.object({
               name: Joi.string().min(1).max(100).required()
-            }
+            }),
         }
     },
-    handler: function (request, reply) {
+    handler: async function (request, h) {
 
       request.payload.ident = slugify(request.payload.name);
 
-      mongodb.nyhedsbreve().findOne({ident: request.payload.ident}, function (err, newsletter) {
-        if (newsletter === null) {
-          mongodb.nyhedsbreve().insertOne(request.payload, function (err, result) {
-            if (err) {
-              reply(err).code(500);
-            } else {
-              reply(result.ops[0]);
-            }
-          });
-        } else {
-          reply().code(409);
-        }
-      });
+      const newsletter = await mongodb.nyhedsbreve().findOne({ident: request.payload.ident});
+      if (newsletter === null) {
+        const result = await mongodb.nyhedsbreve().insertOne(request.payload);
+        return h.response(result.ops[0]);
+      } else {
+        return h.response().code(409);
+      }
     }
   });
 
@@ -144,30 +137,23 @@ module.exports.register = function (plugin, options, next) {
     path: '/{ident}',
     config: {
         validate: {
-            params: {
+            params: Joi.object({
               ident: Joi.string().min(1).max(100)
-            },
-            payload: newsletter_schema
+            }),
+            payload: Joi.object(newsletter_schema),
         }
     },
-    handler: function (request, reply) {
-
-      mongodb.nyhedsbreve().updateOne( {ident: request.params.ident},
+    handler: async function (request, h) {
+      const response = await mongodb.nyhedsbreve().updateOne( {ident: request.params.ident},
         {
           $set: request.payload,
           $currentDate: { "last_modified": true }
-      }, function (err, response) {
-          if (response.result.nModified === 1) {
-          reply();
-        } else {
-          reply().code(404);
-        }
       });
-
-      function undefinedOrBlank (input) {
-        return input === undefined ||
-          (typeof input === 'string' ? input.length === 0 : false);
+      if (response.result.nModified === 1) {
+        return h.response();
       }
+
+      return h.response().code(404);
     }
   });
 
@@ -176,26 +162,23 @@ module.exports.register = function (plugin, options, next) {
     path: '/{ident}',
     config: {
       validate: {
-        params: {
+        params: Joi.object({
           ident: Joi.string().min(1).max(100)
-        },
-        payload: newsletter_schema
+        }),
+        payload: Joi.object(newsletter_schema),
       }
     },
-    handler: function (request, reply) {
-      mongodb.nyhedsbreve().replaceOne({ident: request.params.ident},
-        request.payload,
-        function (err, response) {
-          if (response.result.nModified === 1) {
-            mongodb.nyhedsbreve().updateOne(
-              {ident: request.params.ident},
-              {$currentDate: { "last_modified": true }});
+    handler: async function (request, h) {
+      const response = await mongodb.nyhedsbreve().replaceOne({ident: request.params.ident}, request.payload);
+      if (response.result.nModified === 1) {
+        mongodb.nyhedsbreve().updateOne(
+          {ident: request.params.ident},
+          {$currentDate: { "last_modified": true }});
 
-            reply();
-          } else {
-            reply().code(404);
-          }
-      });
+        return h.response();
+      } else {
+        return h.response().code(404);
+      }
     }
   });
 
@@ -204,23 +187,18 @@ module.exports.register = function (plugin, options, next) {
     path: '/{ident}',
     config: {
       validate: {
-        params: {
+        params: Joi.object({
           ident: Joi.string().min(1).max(100)
-        }
+        }),
       }
     },
-    handler: function (request, reply) {
-      mongodb.nyhedsbreve().deleteOne({ident: request.params.ident}, function (err, response) {
-        if (err) {
-            return reply(err);
-        }
-
-        if (response.result.n === 1) {
-          reply();
-        } else {
-          reply().code(404);
-        }
-      });
+    handler: async function (request, h) {
+      const response = await mongodb.nyhedsbreve().deleteOne({ident: request.params.ident})
+      if (response.result.n === 1) {
+        return h.response();
+      } else {
+        return h.response().code(404);
+      }
     }
   });
 
@@ -230,30 +208,14 @@ module.exports.register = function (plugin, options, next) {
     path: '/upload',
     config: {
       validate: {
-        payload: exacttarget_email_asset
+        payload: Joi.object(exacttarget_email_asset),
       }
     },
     handler: function (request, reply) {
-
-      exacttarget.createEmailAsset(request.payload, function (err, result) {
-        if (err) {
-          reply(err).code(err.statusCode ? err.statusCode : 500);
-        } else {
-          reply(result);
-        }
-      });
-
+      return exacttarget.createEmailAsset(request.payload);
     }
   });
-
-  next();
 };
-
-module.exports.register.attributes = {
-    name: 'newsletters',
-    version: '1.0.0'
-};
-
 
 function slugify (name) {
   return name.toString().toLowerCase()

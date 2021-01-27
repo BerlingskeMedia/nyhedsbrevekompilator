@@ -4,54 +4,51 @@
 const Http = require('http');
 const Joi = require('joi');
 
-module.exports.register = function (plugin, options, next) {
+module.exports.name = 'data';
+module.exports.register = function (plugin, options) {
 
   plugin.route({
     method: 'GET',
     path: '/',
     config: {
       validate: {
-        query: {
+        query: Joi.object({
           u: Joi.string().uri().required()
-        }
+        }),
       }
     },
-    handler: function (request, reply) {
-      get(request.query.u, reply);
+    handler: function (request) {
+      return get(request.query.u);
     }
   });
-
-  next();
 };
 
-module.exports.register.attributes = {
-    name: 'data',
-    version: '1.0.0'
-};
+module.exports.name = 'data';
 
+function get (url) {
+  return new Promise((r, j) => {
+    download(url, function (err, data) {
+      if (err) return j(err);
+      if (data === null) return r(null);
 
-function get (url, callback) {
-  download(url, function (err, data) {
-    if (err) return callback(err);
-    if (data === null) return callback(null, null);
+      if (data.type !== undefined && ['nodequeue', 'latest_news', 'news_article'].indexOf(data.type) > -1) {
+        orderBondImages(data);
+        data.subject = subjectSuggestion(data);
+        r(data);
+      // } else if (data.type === 'nodequeue' && data.nodes.length === 0 ) {
+        // callback(null, null);
 
-    if (data.type !== undefined && ['nodequeue', 'latest_news', 'news_article'].indexOf(data.type) > -1) {
-      orderBondImages(data);
-      data.subject = subjectSuggestion(data);
-      callback(null, data);
-    // } else if (data.type === 'nodequeue' && data.nodes.length === 0 ) {
-      // callback(null, null);
-
-      // Example of a response from a nodequeue that doesn't exist
-      //   { type: 'nodequeue',
-      //     id: '4222222626',
-      //     loadType: 'fullNode',
-      //     title: null,
-      //     nodes: [] }
-    } else {
-      callback(data);
-    }
-  });
+        // Example of a response from a nodequeue that doesn't exist
+        //   { type: 'nodequeue',
+        //     id: '4222222626',
+        //     loadType: 'fullNode',
+        //     title: null,
+        //     nodes: [] }
+      } else {
+        r(data);
+      }
+    });
+  })
 }
 module.exports.get = get;
 

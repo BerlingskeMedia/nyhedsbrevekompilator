@@ -1,24 +1,37 @@
-{% if node !== undefined && node !== null %}
+{% if node == undefined or node == null %}
+  {% if content != undefined and content != null %}
+    {% set node = content.node %}
+  {% endif %}
+{% endif %}
 
+{% if width == undefined or width == null %}
+  {% if content != undefined and content != null %}
+    {% set width = content.width %}
+  {% else %}
+    {% set width = 'auto' %}
+  {% endif %}
+{% endif %}
+
+{% if node != undefined and node != null %}
   {% set article_url_appendage = tags | tagValue('article_url_appendage') %}
 
   <!-- AOK article -->
   <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0">
     <tbody>
 
-      {% set image_count = 0; %}
-      {% if node.images | typeof === '[object Object]' %}
-        {% set images_keys = Object.keys(node.images); %}
-        {% set image_count = images_keys.length; %}
-      {% elif node.images | typeof === '[object Array]' %}
-        {% set image_count = node.images.length; %}
+      {% set image_count = 0 %}
+      {% if node.images | typeof == '[object Object]' %}
+        {% set images_keys = Object.keys(node.images) %}
+        {% set image_count = images_keys.length %}
+      {% elif node.images | typeof == '[object Array]' %}
+        {% set image_count = node.images.length %}
       {% endif %}
 
-      {% if image_count > 0 && node.hide_image !== true %}
-        {% set image_found = false; %}
+      {% if image_count > 0 and node.hide_image != true %}
+        {% set image_found = false %}
         {% for image in node.images %}
-          {% if !image_found && image.relation | hasValue('default') %}
-            {% set image_found = true; %}
+          {% if !image_found and image.relation | hasValue('default') %}
+            {% set image_found = true %}
             <tr>
               <td align="center" valign="top">
                 <a href="{{ node.url }}?{{ article_url_appendage }}&{{ tracking }}" target="_blank" style="text-decoration: none;">
@@ -43,7 +56,7 @@
         {% endfor %}
       {% endif %}
 
-      {% if primary_tag && show_tag !== false %}
+      {% if primary_tag and show_tag != false %}
       <tr>
         <td align="left" valign="top">
           <div style="margin-top: 5px; margin-bottom: 5px;">
@@ -71,7 +84,7 @@
         </td>
       </tr>
 
-      {% if (node.primary_article && node.summary) || always_show_article_summary === true %}
+      {% if (node.primary_article and node.summary) or always_show_article_summary == true %}
       <tr>
         <td align="left" valign="top">
           <a href="{{ node.url }}?{{ article_url_appendage }}&{{ tracking }}" target="_blank"  style="text-decoration: none;">

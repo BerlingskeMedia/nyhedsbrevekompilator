@@ -2,16 +2,18 @@
 'use strict';
 
 const MongoClient = require('mongodb').MongoClient;
-var db;
+let db;
 
 const mongodb_host = process.env.MONGODB_HOST !== undefined ? process.env.MONGODB_HOST : '127.0.0.1';
 const mongodb_port = process.env.MONGODB_PORT !== undefined ? process.env.MONGODB_PORT : '27017';
 const mongodb_database = process.env.MONGODB_DATABASE !== undefined ? process.env.MONGODB_DATABASE : 'nyhedsbrevekompilator';
 
-MongoClient.connect('mongodb://' + mongodb_host + ':' + mongodb_port + '/' + mongodb_database, function(err, database) {
-  db = database;
+MongoClient.connect('mongodb://' + mongodb_host + ':' + mongodb_port,
+    { useUnifiedTopology: true },
+    function(err, client) {
+  db = client.db(mongodb_database);
   if (err) throw err;
-  else console.log('Connecting to Mongo on', mongodb_host);
+  else console.log('Connected to Mongo on', mongodb_host);
 });
 
 module.exports.close = function(callback) {

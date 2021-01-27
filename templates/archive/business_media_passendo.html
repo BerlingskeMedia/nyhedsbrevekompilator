@@ -9,17 +9,21 @@
 {% set kw = "business_media"; %}
 
 {% block wide_banner_2 %}
-{% include "partials/passendo_banner.html" with { placementID: "133" } %}
+{% set content = { placementID: '133' } %}
+{% include "partials/passendo_banner.html" %}
 {% endblock %}
 
 {% block wide_banner_3 %}
-{# include "partials/passendo_banner.html" with { placementID: "XXX" } #}
+{% set content = { placementID: 'XXX' } %}
+{% include "partials/passendo_banner.html" %}
 {% endblock %}
 
 {% block box_banner_1 %}
-{% include "partials/passendo_banner.html" with { placementID: "118" } %}
+{% set content = { placementID: '118' } %}
+{% include "partials/passendo_banner.html" %}
 {% endblock %}
 
 {% block box_banner_2 %}
-{% include "partials/passendo_banner.html" with { placementID: "120" } %}
+{% set content = { placementID: '120' } %}
+{% include "partials/passendo_banner.html" %}
 {% endblock %}

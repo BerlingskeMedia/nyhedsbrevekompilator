@@ -11,17 +11,21 @@
 {% set kw = "berlingske_rejseliv"; %}
 
 {% block wide_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "205989" } %}
+{% set content = { setID: '205989' } %}
+{% include "_partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block wide_banner_3 %}
-{% include "partials/adbutler_banner.html" with { setID: "205994" } %}
+{% set content = { setID: '205994' } %}
+{% include "_partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_1 %}
-{% include "partials/adbutler_banner.html" with { setID: "206275" } %}
+{% set content = { setID: '206275' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206246" } %}
+{% set content = { setID: '206246' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}

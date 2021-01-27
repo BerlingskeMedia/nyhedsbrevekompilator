@@ -11,17 +11,21 @@
 {% set kw = "bt_eftermiddag"; %}
 
 {% block wide_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206010" } %}
+{% set content = { setID: '206010' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block wide_banner_3 %}
-{% include "partials/adbutler_banner.html" with { setID: "206011" } %}
+{% set content = { setID: '206011' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_1 %}
-{% include "partials/adbutler_banner.html" with { setID: "206251" } %}
+{% set content = { setID: '206251' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
 
 {% block box_banner_2 %}
-{% include "partials/adbutler_banner.html" with { setID: "206252" } %}
+{% set content = { setID: '206252' } %}
+{% include "partials/adbutler_banner.html" %}
 {% endblock %}
