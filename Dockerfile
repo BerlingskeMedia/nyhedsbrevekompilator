@@ -1,6 +1,4 @@
-FROM node:10.16-alpine
-
-MAINTAINER Daniel Kokott <dako@berlingskemedia.dk>
+FROM node:14.15-alpine
 
 # Set the working directory.
 WORKDIR /app
@@ -13,6 +11,9 @@ ADD package.json .
 ADD package-lock.json .
 
 RUN npm install --production
+
+RUN mkdir certs
+RUN wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem -P ./certs/
 
 # Exposing our endpoint to Docker.
 EXPOSE  8000
