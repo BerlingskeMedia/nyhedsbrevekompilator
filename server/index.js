@@ -46,6 +46,10 @@ var server = new Hapi.Server({
   await server.route({ method: 'GET', path: '/nyhedsbreve', handler: (r, h) => h.response().redirect('/') });
   await server.register(data, { routes: { prefix: '/data' } });
 
+  await server.route({
+    method: 'GET', path: '/healthcheck', handler: (r, h) => h.response('OK')
+  });
+
   server.start(function() {
     console.log('Server started on ' + server.info.uri + '.');
   });
