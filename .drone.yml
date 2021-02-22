@@ -30,7 +30,6 @@ steps:
         - MONGODB_CERT=./certs/rds-combined-ca-bundle.pem
       secret_environment_variables:
         - MONGODB_HOST
-        - MONGODB_DB
         - MONGODB_USER
         - MONGODB_PASS
       family: mp-testing-nyhedsbrevekompilator-app
@@ -59,12 +58,18 @@ steps:
     environment:
       MONGODB_HOST:
         from_secret: testing_docdb_endpoint
-      MONGODB_DB: nyhedsbrevekompilator
+      MONGODB_DATABASE: nyhedsbrevekompilator
       MONGODB_PORT: 27017
       MONGODB_USER:
         from_secret: testing_docdb_user
       MONGODB_PASS:
         from_secret: testing_docdb_password
+      EXACTTARGET_APP_CLIENT_ID:
+        from_secret: testing_exact_target_app_client_id
+      EXACTTARGET_APP_CLIENT_SECRET:
+        from_secret: testing_exact_target_app_client_secret
+      PAYWALL_TOKEN_SALT:
+        from_secret: testing_paywall_token_salt
 trigger:
   event:
     - tag

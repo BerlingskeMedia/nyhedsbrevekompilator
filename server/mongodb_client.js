@@ -7,13 +7,19 @@ let db;
 const mongodb_host = process.env.MONGODB_HOST !== undefined ? process.env.MONGODB_HOST : '127.0.0.1';
 const mongodb_port = process.env.MONGODB_PORT !== undefined ? process.env.MONGODB_PORT : '27017';
 const mongodb_database = process.env.MONGODB_DATABASE !== undefined ? process.env.MONGODB_DATABASE : 'nyhedsbrevekompilator';
+const options = { useUnifiedTopology: true };
+
+if (process.env.MONGODB_SSL && process.env.MONGODB_CERT) {
+  options.tls = true;
+  options.tlsCAFile = process.env.MONGODB_CERT;
+}
 
 MongoClient.connect('mongodb://' + mongodb_host + ':' + mongodb_port,
-    { useUnifiedTopology: true },
+    options,
     function(err, client) {
-  db = client.db(mongodb_database);
   if (err) throw err;
-  else console.log('Connected to Mongo on', mongodb_host);
+  db = client.db(mongodb_database);
+  console.log('Connected to Mongo on', mongodb_host);
 });
 
 module.exports.close = function(callback) {
