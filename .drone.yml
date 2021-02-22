@@ -28,17 +28,22 @@ steps:
       environment_variables:
         - MONGODB_SSL=true
         - MONGODB_CERT=./certs/rds-combined-ca-bundle.pem
+        - MONGODB_PORT=27017
+        - MONGODB_DATABASE=nyhedsbrevekompilator
       secret_environment_variables:
         - MONGODB_HOST
         - MONGODB_USER
         - MONGODB_PASS
+        - EXACTTARGET_APP_CLIENT_ID
+        - EXACTTARGET_APP_CLIENT_SECRET
+        - PAYWALL_TOKEN_SALT
       family: mp-testing-nyhedsbrevekompilator-app
       log_driver: awslogs
       log_options:
         - awslogs-group=mp-testing-nyhedsbrevekompilator
         - awslogs-region=eu-west-1
         - awslogs-stream-prefix=nyhedsbrevekompilator-app
-        - awslogs-datetime-format=\[%Y-%m-%dT%H:%M:%S%L\]
+        #- awslogs-datetime-format=\[%Y-%m-%dT%H:%M:%S%L\]
       memory: 512
       region: eu-west-1
       service: mp-testing-nyhedsbrevekompilator-app
@@ -58,8 +63,6 @@ steps:
     environment:
       MONGODB_HOST:
         from_secret: testing_docdb_endpoint
-      MONGODB_DATABASE: nyhedsbrevekompilator
-      MONGODB_PORT: 27017
       MONGODB_USER:
         from_secret: testing_docdb_user
       MONGODB_PASS:
