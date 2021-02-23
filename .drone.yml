@@ -26,7 +26,6 @@ steps:
       port_mappings:
         - 8000 8000
       environment_variables:
-        - MONGODB_SSL=true
         - MONGODB_CERT=./certs/rds-combined-ca-bundle.pem
         - MONGODB_PORT=27017
         - MONGODB_DATABASE=nyhedsbrevekompilator

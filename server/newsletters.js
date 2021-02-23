@@ -91,14 +91,8 @@ module.exports.register = function (plugin, options) {
   plugin.route({
     method: 'get',
     path: '/',
-    handler: async function (request, h) {
-      try {
-        const newsletters = await mongodb.nyhedsbreve().find({}).toArray();
-        h.response(newsletters);
-      } catch (e) {
-        console.error(e);
-        h.response(e.message).code(500);
-      }
+    handler: function (request, h) {
+      return mongodb.nyhedsbreve().find({}).toArray();
     }
   });
 
