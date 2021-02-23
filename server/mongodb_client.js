@@ -15,7 +15,6 @@ const options = { useNewUrlParser: true, useUnifiedTopology: true };
 
 if (process.env.MONGODB_CERT) {
   options.tls = true;
-  options.tlsAllowInvalidHostnames = true
   options.tlsCAFile = process.env.MONGODB_CERT;
 }
 
