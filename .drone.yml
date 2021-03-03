@@ -79,6 +79,89 @@ trigger:
     include:
       - refs/tags/testing-*
 
+
+---
+kind: pipeline
+type: docker
+name: Prod pipeline
+
+steps:
+  - name: Publish nyhedsbrevekompilator image
+    image: plugins/ecr
+    settings:
+      region: eu-west-1
+      repo: mp-production-nyhedsbrevekompilator-ecr/app
+      registry: 815296035528.dkr.ecr.eu-west-1.amazonaws.com
+      dockerfile: Dockerfile
+      mirror: https://proxy.docker.all.berlingskemedia.net
+      tags:
+        - ${CI_COMMIT_SHA}
+
+  - name: Deploy nyhedsbrevekompilator image to production
+    image: pelotech/drone-ecs:1.0.7
+    settings:
+      cluster: mp-production-nyhedsbrevekompilator
+      compatibilities: FARGATE
+      deployment_configuration: 100 200
+      desired_count: 1
+      docker_image: 815296035528.dkr.ecr.eu-west-1.amazonaws.com/mp-production-nyhedsbrevekompilator-ecr/app
+      port_mappings:
+        - 8000 8000
+      environment_variables:
+        - MONGODB_CERT=./certs/rds-combined-ca-bundle.pem
+        - MONGODB_REPLSET=rs0
+        - MONGODB_PORT=27017
+        - MONGODB_DATABASE=nyhedsbrevekompilator
+      secret_environment_variables:
+        - MONGODB_HOST
+        - MONGODB_USER
+        - MONGODB_PASS
+        - EXACTTARGET_APP_CLIENT_ID
+        - EXACTTARGET_APP_CLIENT_SECRET
+        - PAYWALL_TOKEN_SALT
+      family: mp-production-nyhedsbrevekompilator-app
+      log_driver: awslogs
+      log_options:
+        - awslogs-group=mp-production-nyhedsbrevekompilator
+        - awslogs-region=eu-west-1
+        - awslogs-stream-prefix=nyhedsbrevekompilator-app
+        #- awslogs-datetime-format=\[%Y-%m-%dT%H:%M:%S%L\]
+      memory: 512
+      region: eu-west-1
+      service: mp-production-nyhedsbrevekompilator-app
+      service_network_security_groups:
+        - sg-0f544725a78677a95
+        - sg-02b66601dc664305a
+      service_network_subnets:
+        - subnet-061a8876f7f68ea21
+        - subnet-0ace4f6a68677187c
+        - subnet-01633ca14c693e302
+      tag: ${CI_COMMIT_SHA}
+      task_cpu: 256
+      task_execution_role_arn: arn:aws:iam::815296035528:role/mp-production-nyhedsbrevekompilator-app-exec
+      task_role_arn: arn:aws:iam::815296035528:role/mp-production-nyhedsbrevekompilator-app-task
+      task_memory: 512
+      task_network_mode: awsvpc
+    environment:
+      MONGODB_HOST:
+        from_secret: production_docdb_endpoint
+      MONGODB_USER:
+        from_secret: production_docdb_user
+      MONGODB_PASS:
+        from_secret: production_docdb_password
+      EXACTTARGET_APP_CLIENT_ID:
+        from_secret: production_exact_target_app_client_id
+      EXACTTARGET_APP_CLIENT_SECRET:
+        from_secret: production_exact_target_app_client_secret
+      PAYWALL_TOKEN_SALT:
+        from_secret: production_paywall_token_salt
+trigger:
+  event:
+    - tag
+  ref:
+    include:
+      - refs/tags/release-*
+
 ---
 kind: "secret"
 name: "testing_docdb_host"
@@ -105,4 +188,32 @@ kind: "secret"
 name: "testing_docdb_password"
 get:
   path: "drone/mp-testing-nyhedsbrevekompilator"
+  name: "docdb_password"
+
+---
+kind: "secret"
+name: "production_docdb_host"
+get:
+  path: "drone/mp-production-nyhedsbrevekompilator"
+  name: "docdb_host"
+
+---
+kind: "secret"
+name: "production_docdb_endpoint"
+get:
+  path: "drone/mp-production-nyhedsbrevekompilator"
+  name: "docdb_endpoint"
+
+---
+kind: "secret"
+name: "production_docdb_user"
+get:
+  path: "drone/mp-production-nyhedsbrevekompilator"
+  name: "docdb_user"
+
+---
+kind: "secret"
+name: "production_docdb_password"
+get:
+  path: "drone/mp-production-nyhedsbrevekompilator"
   name: "docdb_password"

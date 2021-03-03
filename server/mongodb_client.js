@@ -19,7 +19,7 @@ if (process.env.MONGODB_CERT) {
 }
 
 if (MONGODB_REPLSET) {
-  options.replicaSet = 'rs0';
+  options.replicaSet = MONGODB_REPLSET;
   options.readPreference = MONGODB_READPREFERENCE || 'secondaryPreferred';
 }
 
